@@ -32,11 +32,15 @@ spec:
             username: mlflow
             password: mlflowpass
             database: mlflowdb
-
+            
         minio:
           enabled: true
           persistence:
             enabled: false
+          image:
+            registry: docker.io
+            repository: bitnami/minio
+            tag: latest
 
   destination:
     server: https://kubernetes.default.svc
