@@ -1,15 +1,63 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mlflow
-  namespace: infra-tools        # де встановлено ArgoCD
-spec:
-  project: default
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: mlflow
+#   namespace: infra-tools        # де встановлено ArgoCD
+# spec:
+#   project: default
+
+#   source:
+#     repoURL: https://charts.bitnami.com/bitnami
+#     chart: mlflow
+#     targetRevision: 1.4.6       # версія чарта MLflow
+
+#     helm:
+#       values: |
+#         service:
+#           type: ClusterIP
+
+#         tracking:
+#           enabled: true
+
+#         auth:
+#           enabled: false
+
+#         postgresql:
+#           enabled: true
+#           primary:
+#             persistence:
+#               enabled: false
+#           auth:
+#             postgresPassword: mlflowpass
+#             username: mlflow
+#             password: mlflowpass
+#             database: mlflowdb
+            
+#         minio:
+#           enabled: true
+#           persistence:
+#             enabled: false
+#           image:
+#             registry: docker.io
+#             repository: bitnami/minio
+#             tag: latest
+
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: application      # куди деплоїмо MLflow
+
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
+
 
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: mlflow
-    targetRevision: 1.4.6       # версія чарта MLflow
+    targetRevision: 1.4.6
 
     helm:
       values: |
@@ -24,6 +72,10 @@ spec:
 
         postgresql:
           enabled: true
+          image:
+            registry: docker.io
+            repository: bitnami/postgresql
+            tag: latest
           primary:
             persistence:
               enabled: false
@@ -32,23 +84,12 @@ spec:
             username: mlflow
             password: mlflowpass
             database: mlflowdb
-            
+
         minio:
           enabled: true
-          persistence:
-            enabled: false
           image:
             registry: docker.io
             repository: bitnami/minio
             tag: latest
-
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: application      # куди деплоїмо MLflow
-
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+          persistence:
+            enabled: false
